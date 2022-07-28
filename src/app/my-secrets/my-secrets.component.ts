@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-my-secrets',
@@ -8,12 +8,15 @@ import { Component, OnInit } from '@angular/core';
 export class MySecretsComponent implements OnInit {
 
   authorized: boolean = false;
+  secrets: any[]=[];
   constructor() { 
-    
   }
 
   ngOnInit(): void {
 
+  }
+  addnewSecret(secret: any): void {
+    this.secrets.push(secret);
   }
 
 }

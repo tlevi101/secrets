@@ -2,6 +2,7 @@ import { Component, ViewChild} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { MySecretsComponent } from './my-secrets/my-secrets.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,19 +12,21 @@ export class AppComponent {
   title = 'secrets';
   @ViewChild(LoginComponent) loginComp:LoginComponent;
   @ViewChild(RegisterComponent) regComp:RegisterComponent;
+  @ViewChild(MySecretsComponent) mySecrets:MySecretsComponent;
   private authToken: {token:string};
-  private hr= new HttpHeaders().set('Content-Type', 'application/json');
+  private hr= new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
   constructor(private http: HttpClient) {
     this.authToken = {token: ''};
     this.loginComp = new LoginComponent();
     this.regComp = new RegisterComponent();
+    this.mySecrets = new MySecretsComponent();
   }
   sendLoginRequest($event:{email:string, password:string}) {
     this.loginComp.showHideLoading();
     const CB =() => {
       this.http.post('https://picturesque-zealous-gymnast.glitch.me/login',JSON.stringify($event), {headers: this.hr}).subscribe(
         (res: any) =>{
-          console.log(res);
+          console.log(res.token);
           this.authToken.token = res?.token
           this.loginComp.showHideLoading();
           this.loginComp.showME=false;
@@ -41,7 +44,7 @@ export class AppComponent {
     const CB =() => {
       this.http.post('https://picturesque-zealous-gymnast.glitch.me/register',JSON.stringify($event), {headers: this.hr}).subscribe(
         (res: any) =>{
-          console.log(res);
+          console.log(res.token);
           this.authToken.token = res?.token;
           this.regComp.showHideLoading();
           this.regComp.showME=false;
@@ -59,6 +62,18 @@ export class AppComponent {
     }
     setTimeout(CB, 250);
   }
+  mySecretsRequest(){
+    console.log(this.hr);
+    this.http.get('http://picturesque-zealous-gymnast.glitch.me/my-secrets', {headers: this.hr.append('Authorization', `Bearer ${this.authToken.token}`)}).subscribe(
+      (res:any)=>{
+        res.map((x:any)=>this.mySecrets.addnewSecret(x));
+        console.log(res);
+    },
+    (err) =>{
+
+    }
+    )
+  }
   addedComponent($event:any) {
     console.log($event.constructor.name);
     if($event.constructor.name==='LoginComponent'){
@@ -72,6 +87,13 @@ export class AppComponent {
       $event.onRegSubmit.subscribe((req:any) => {
         this.sendLoginRequest(req);
       });
+    }
+    else if($event.constructor.name==='MySecretsComponent'){
+      if(this.AuthToken.token!==''){
+        $event.authorized=true;
+        this.mySecrets=$event;
+        this.mySecretsRequest();
+      }
     }
   }
   removedComponent($event:any){
