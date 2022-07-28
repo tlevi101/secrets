@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MySecretsComponent implements OnInit {
 
-  constructor() { }
+  authorized: boolean = false;
+  constructor() { 
+    
+  }
 
   ngOnInit(): void {
+
   }
 
 }

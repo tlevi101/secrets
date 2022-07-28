@@ -14,7 +14,7 @@ export class AppComponent {
   private authToken: {token:string};
   private hr= new HttpHeaders().set('Content-Type', 'application/json');
   constructor(private http: HttpClient) {
-    this.authToken = {token: 'null'};
+    this.authToken = {token: ''};
     this.loginComp = new LoginComponent();
     this.regComp = new RegisterComponent();
   }
@@ -60,14 +60,15 @@ export class AppComponent {
     setTimeout(CB, 250);
   }
   addedComponent($event:any) {
-    if($event.onLoginSubmit!==undefined){
+    console.log($event.constructor.name);
+    if($event.constructor.name==='LoginComponent'){
       this.loginComp=$event;
       $event.onLoginSubmit.subscribe((req:{email:string, password:string}) => {
         this.sendLoginRequest(req);
       });
     }
-    else if($event.onRegSubmit!==undefined){
-      this.loginComp=$event;
+    else if($event.constructor.name==='RegisterComponent'){
+      this.regComp=$event;
       $event.onRegSubmit.subscribe((req:any) => {
         this.sendLoginRequest(req);
       });
@@ -84,5 +85,8 @@ export class AppComponent {
         this.sendLoginRequest(req);
       });
     }
+  }
+  get AuthToken(){
+    return this.authToken;
   }
 }
