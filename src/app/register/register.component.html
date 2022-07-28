@@ -6,6 +6,9 @@
         <div *ngIf="username?.touched && username?.getError('required')" class="alert alert-danger" role="alert">
             Username is required!  
         </div>
+        <div *ngIf="username?.touched && requestError?.username!==''" class="alert alert-danger" role="alert">
+            {{requestError.username}}
+          </div>
 
         <input type="email" class="form-control mb-3" name="email" placeholder="Email address" formControlName="email">
             <div *ngIf="email?.touched && email?.getError('required')" class="alert alert-danger" role="alert">
@@ -14,9 +17,9 @@
             <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger" role="alert">
                 Email format is not correct!
             </div>
-          <!-- <div *ngIf="requestError.code===404" class="alert alert-danger" role="alert">
-            {{requestError.message}}
-          </div> -->
+          <div *ngIf="email?.touched && requestError?.email!==''" class="alert alert-danger" role="alert">
+            {{requestError.email}}
+          </div>
         <input type="password" class="form-control mb-3" placeholder="Password" formControlName="password">
             <div *ngIf="password?.touched && password?.invalid" class="alert alert-danger" role="alert">
             Password is required!  
@@ -28,7 +31,7 @@
             <div *ngIf="passwordAgain?.touched && passwordAgain?.getError('required')" class="alert alert-danger" role="alert">
                 Password again is required!  
             </div>
-            <div *ngIf="passwordAgain?.touched && !passwordAgain?.getError('match')" class="alert alert-danger" role="alert">
+            <div *ngIf="passwordAgain?.touched && passwordAgain?.getError('match')===false" class="alert alert-danger" role="alert">
                 Passwords does'n match!   
             </div>
         <div class="row mb-3 ">

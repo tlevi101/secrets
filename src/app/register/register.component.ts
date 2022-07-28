@@ -10,7 +10,7 @@ export class RegisterComponent implements OnInit {
   showRegisterBTN=true;
   showLoading = false;
   showME =true;
-  requestError: {code: number, message: string};
+  requestError: {email:'', username:''};
   @Output() onSubmit = new EventEmitter<{username:string,email: string, password:string, passwordAgain:string}>();
   constructor() { 
     const FB =new FormBuilder();
@@ -31,13 +31,14 @@ export class RegisterComponent implements OnInit {
       ]],
 
     });
-    this.requestError = {code: -1, message: ''}
+    this.requestError = {username: '', email: ''}
     this.passwordAgain?.valueChanges.subscribe(() => {
       if(this.passwordAgain?.value!==this.password?.value){
         this.passwordAgain?.setErrors({match:false});
       }
       else{
-        this.passwordAgain?.setErrors({match:true});
+        this.passwordAgain?.setErrors(null);
+        console.log(this.passwordAgain);
       }
     })
     this.password?.valueChanges.subscribe(() => {
@@ -45,12 +46,28 @@ export class RegisterComponent implements OnInit {
         this.passwordAgain?.setErrors({match:false});
       }
       else{
-        this.passwordAgain?.setErrors({match:true});
+        this.passwordAgain?.setErrors(null);
+        console.log(this.passwordAgain);
       }
     })
   }
   register(){
-    this.onSubmit.emit({username: this.username?.value, email: this.email?.value, password: this.password?.value, passwordAgain: this.passwordAgain?.value});
+    this.onSubmit.emit({
+      username: this.username?.value, 
+      email: this.email?.value, 
+      password: this.password?.value, 
+      passwordAgain: this.passwordAgain?.value
+    });
+  }
+  showHideLoading(){
+    if(this.showLoading===true){
+      this.showLoading=false;
+      this.showRegisterBTN=true;
+    }
+    else{
+      this.showLoading=true;
+      this.showRegisterBTN=false;
+    }
   }
   ngOnInit(): void {
   }
