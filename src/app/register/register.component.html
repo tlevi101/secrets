@@ -1,1 +1,50 @@
-<p>register works!</p>
+<div *ngIf="showME" class="container">
+    <h1 class="text-center">Register</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+        
+        <input type="text" class="form-control mb-3" placeholder="Username" formControlName="username">
+        <div *ngIf="username?.touched && username?.getError('required')" class="alert alert-danger" role="alert">
+            Username is required!  
+        </div>
+
+        <input type="email" class="form-control mb-3" name="email" placeholder="Email address" formControlName="email">
+            <div *ngIf="email?.touched && email?.getError('required')" class="alert alert-danger" role="alert">
+                Email is required!  
+            </div>
+            <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger" role="alert">
+                Email format is not correct!
+            </div>
+          <!-- <div *ngIf="requestError.code===404" class="alert alert-danger" role="alert">
+            {{requestError.message}}
+          </div> -->
+        <input type="password" class="form-control mb-3" placeholder="Password" formControlName="password">
+            <div *ngIf="password?.touched && password?.invalid" class="alert alert-danger" role="alert">
+            Password is required!  
+            </div>
+          <!-- <div *ngIf="requestError.code===401" class="alert alert-danger" role="alert">
+            {{requestError.message}} 
+          </div> -->
+        <input type="password" class="form-control mb-3" placeholder="Password again" formControlName="passwordAgain">
+            <div *ngIf="passwordAgain?.touched && passwordAgain?.getError('required')" class="alert alert-danger" role="alert">
+                Password again is required!  
+            </div>
+            <div *ngIf="passwordAgain?.touched && !passwordAgain?.getError('match')" class="alert alert-danger" role="alert">
+                Passwords does'n match!   
+            </div>
+        <div class="row mb-3 ">
+            
+            <div class="col text-center">
+                <button type="button" class="btn btn-lg btn-primary">Login</button>
+            </div>
+            <div class="col text-center">
+                <button type="submit" *ngIf="showRegisterBTN"[disabled]="registerForm.invalid" class="btn btn-lg btn-primary">Register</button>
+                <div class="text-center" *ngIf="showLoading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

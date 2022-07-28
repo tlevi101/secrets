@@ -9,7 +9,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showLoginBTN=true;
   showLoading = false;
-  showME =true;
+  showME =false;
   requestError: {code: number, message: string};
   @Output() onSubmit = new EventEmitter<{email: string, password:string}>();
   constructor() { 

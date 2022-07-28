@@ -1,11 +1,11 @@
 <div *ngIf="showME" class="container">
     <h1 class="text-center">Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <input type="email" class="form-control mb-3" placeholder="Email address" formControlName="email">
+        <input type="email" name="email" class="form-control mb-3" placeholder="Email address" formControlName="email">
         <div *ngIf="email?.touched && email?.getError('required')" class="alert alert-danger" role="alert">
           Email is required!  
         </div>
-        <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger" role="alert">
+        <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger-sm" role="alert">
             Email format is not correct!
           </div>
           <div *ngIf="requestError.code===404" class="alert alert-danger" role="alert">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="col text-center">
-                <a href=""><button type="button" class="btn btn-lg btn-primary">Register</button></a>
+                <button type="button" class="btn btn-lg btn-primary">Register</button>
             </div>
         </div>
     </form>
