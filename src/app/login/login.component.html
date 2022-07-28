@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="showME" class="container">
     <h1 class="text-center">Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="login()">
         <input type="email" class="form-control mb-3" placeholder="Email address" formControlName="email">
@@ -8,17 +8,30 @@
         <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger" role="alert">
             Email format is not correct!
           </div>
+          <div *ngIf="requestError.code===404" class="alert alert-danger" role="alert">
+            {{requestError.message}}
+          </div>
         <input type="password" class="form-control mb-3" placeholder="Password" formControlName="password">
-        <div *ngIf="password?.touched && password?.invalid" class="alert alert-danger" role="alert">
+            <div *ngIf="password?.touched && password?.invalid" class="alert alert-danger" role="alert">
             Password is required!  
           </div>
+          <div *ngIf="requestError.code===401" class="alert alert-danger" role="alert">
+            {{requestError.message}} 
+          </div>
         <div class="row mb-3 ">
+            
             <div class="col text-center">
-                <button type="submit" class="btn  btn-primary ">Login</button>
+                <button type="submit" *ngIf="showLoginBTN"[disabled]="loginForm.invalid" class="btn btn-lg btn-primary">Login</button>
+                <div class="text-center" *ngIf="showLoading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
             </div>
             <div class="col text-center">
-                <a href=""><button type="button" class="btn btn-primary">Register</button></a>
+                <a href=""><button type="button" class="btn btn-lg btn-primary">Register</button></a>
             </div>
         </div>
     </form>
 </div>
+
