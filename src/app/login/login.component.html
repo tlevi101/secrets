@@ -1,8 +1,17 @@
 <div class="container">
     <h1 class="text-center">Login</h1>
-    <form>
-        <input type="email" class="form-control mb-3" placeholder="Email address">
-        <input type="password" class="form-control mb-3" placeholder="Password">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <input type="email" class="form-control mb-3" placeholder="Email address" formControlName="email">
+        <div *ngIf="email?.touched && email?.getError('required')" class="alert alert-danger" role="alert">
+          Email is required!  
+        </div>
+        <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger" role="alert">
+            Email format is not correct!
+          </div>
+        <input type="password" class="form-control mb-3" placeholder="Password" formControlName="password">
+        <div *ngIf="password?.touched && password?.invalid" class="alert alert-danger" role="alert">
+            Password is required!  
+          </div>
         <div class="row mb-3 ">
             <div class="col text-center">
                 <button type="submit" class="btn  btn-primary ">Login</button>
