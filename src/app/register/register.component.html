@@ -37,7 +37,9 @@
         <div class="row mb-3 ">
             
             <div class="col text-center">
-                <button type="button" class="btn btn-lg btn-primary">Login</button>
+                <a routerLink="/login">
+                    <button type="button" class="btn btn-lg btn-primary" >Login</button>
+                  </a>
             </div>
             <div class="col text-center">
                 <button type="submit" *ngIf="showRegisterBTN"[disabled]="registerForm.invalid" class="btn btn-lg btn-primary">Register</button>

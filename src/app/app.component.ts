@@ -26,6 +26,7 @@ export class AppComponent {
           console.log(res);
           this.authToken.token = res?.token
           this.loginComp.showHideLoading();
+          this.loginComp.showME=false;
         },
         (err)=>{
           this.loginComp.requestError= {code:err.status,message: err.error.message};
@@ -43,6 +44,7 @@ export class AppComponent {
           console.log(res);
           this.authToken.token = res?.token;
           this.regComp.showHideLoading();
+          this.regComp.showME=false;
         },
         (err)=>{
           if(err.error.message.includes('email')){
@@ -56,5 +58,31 @@ export class AppComponent {
       );
     }
     setTimeout(CB, 250);
+  }
+  addedComponent($event:any) {
+    if($event.onLoginSubmit!==undefined){
+      this.loginComp=$event;
+      $event.onLoginSubmit.subscribe((req:{email:string, password:string}) => {
+        this.sendLoginRequest(req);
+      });
+    }
+    else if($event.onRegSubmit!==undefined){
+      this.loginComp=$event;
+      $event.onRegSubmit.subscribe((req:any) => {
+        this.sendLoginRequest(req);
+      });
+    }
+  }
+  removedComponent($event:any){
+    if($event.onLoginSubmit!==undefined){
+      $event.onLoginSubmit.unsubscribe((req:{email:string, password:string}) => {
+        this.sendLoginRequest(req);
+      });
+    }
+    else if($event.onRegSubmit!==undefined){
+      $event.onRegSubmit.unsubscribe((req:any) => {
+        this.sendLoginRequest(req);
+      });
+    }
   }
 }

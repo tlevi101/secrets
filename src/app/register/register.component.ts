@@ -11,7 +11,7 @@ export class RegisterComponent implements OnInit {
   showLoading = false;
   showME =true;
   requestError: {email:'', username:''};
-  @Output() onSubmit = new EventEmitter<{username:string,email: string, password:string, passwordAgain:string}>();
+  @Output() onRegSubmit = new EventEmitter<{username:string,email: string, password:string, passwordAgain:string}>();
   constructor() { 
     const FB =new FormBuilder();
     this.registerForm = FB.group({
@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
     })
   }
   register(){
-    this.onSubmit.emit({
+    this.onRegSubmit.emit({
       username: this.username?.value, 
       email: this.email?.value, 
       password: this.password?.value, 

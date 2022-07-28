@@ -1,2 +1,7 @@
-<app-login (onSubmit)="sendLoginRequest($event)"></app-login>
-<app-register (onSubmit)="sendRegisterRequest($event)"></app-register>
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <span class="navbar-brand" href="#">Secrets</span>
+  </div>
+</nav>
+
+<router-outlet (activate)="addedComponent($event)" (deactivate)="removedComponent($event)"></router-outlet>

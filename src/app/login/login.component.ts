@@ -9,9 +9,9 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showLoginBTN=true;
   showLoading = false;
-  showME =false;
+  showME =true;
   requestError: {code: number, message: string};
-  @Output() onSubmit = new EventEmitter<{email: string, password:string}>();
+  @Output() onLoginSubmit = new EventEmitter<{email: string, password:string}>();
   constructor() { 
     const FB= new FormBuilder();
     this.loginForm= FB.group({
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
   login(): void{
-    this.onSubmit.emit({email: this.email?.value, password: this.password?.value});
+    this.onLoginSubmit.emit({email: this.email?.value, password: this.password?.value});
   }
   showHideLoading(){
     if(this.showLoading===true){
