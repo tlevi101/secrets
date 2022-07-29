@@ -24,15 +24,12 @@
             <div *ngIf="password?.touched && password?.invalid" class="alert alert-danger" role="alert">
             Password is required!  
             </div>
-          <!-- <div *ngIf="requestError.code===401" class="alert alert-danger" role="alert">
-            {{requestError.message}} 
-          </div> -->
         <input type="password" class="form-control mb-3" placeholder="Password again" formControlName="passwordAgain">
             <div *ngIf="passwordAgain?.touched && passwordAgain?.getError('required')" class="alert alert-danger" role="alert">
                 Password again is required!  
             </div>
             <div *ngIf="passwordAgain?.touched && passwordAgain?.getError('match')===false" class="alert alert-danger" role="alert">
-                Passwords does'n match!   
+                Passwords doesn't match!   
             </div>
         <div class="row mb-3 ">
             <div class="col text-center">

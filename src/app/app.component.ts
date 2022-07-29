@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MySecretsComponent } from './my-secrets/my-secrets.component';
+import { AddNewSecretComponent } from './add-new-secret/add-new-secret.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,6 +14,8 @@ export class AppComponent {
   @ViewChild(LoginComponent) loginComp:LoginComponent;
   @ViewChild(RegisterComponent) regComp:RegisterComponent;
   @ViewChild(MySecretsComponent) mySecrets:MySecretsComponent;
+  @ViewChild(AddNewSecretComponent) addNewSecret:AddNewSecretComponent;
+
   private authToken: {token:string};
   private hr= new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
   constructor(private http: HttpClient) {
@@ -20,6 +23,7 @@ export class AppComponent {
     this.loginComp = new LoginComponent();
     this.regComp = new RegisterComponent();
     this.mySecrets = new MySecretsComponent();
+    this.addNewSecret = new AddNewSecretComponent();
   }
   sendLoginRequest($event:{email:string, password:string}) {
     this.loginComp.showHideLoading();
@@ -63,19 +67,21 @@ export class AppComponent {
     setTimeout(CB, 250);
   }
   mySecretsRequest(){
-    console.log(this.hr);
+    this.mySecrets.showHideLoading();
     this.http.get('http://picturesque-zealous-gymnast.glitch.me/my-secrets', {headers: this.hr.append('Authorization', `Bearer ${this.authToken.token}`)}).subscribe(
       (res:any)=>{
-        res.map((x:any)=>this.mySecrets.addnewSecret(x));
         console.log(res);
+        res.map((x:any)=>this.mySecrets.addnewSecret(x));
+        this.mySecrets.showHideLoading();
+
     },
     (err) =>{
-
+      this.mySecrets.showHideLoading();
+      //TODO:: Invalid token error
     }
     )
   }
   addedComponent($event:any) {
-    console.log($event.constructor.name);
     if($event.constructor.name==='LoginComponent'){
       this.loginComp=$event;
       $event.onLoginSubmit.subscribe((req:{email:string, password:string}) => {
