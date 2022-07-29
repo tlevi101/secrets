@@ -148,6 +148,9 @@ export class AppComponent {
     });
     }
   }
+  logout(){
+    this.authToken.token='';
+  }
   get AuthToken(){
     return this.authToken;
   }
