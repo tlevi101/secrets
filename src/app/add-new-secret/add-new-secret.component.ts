@@ -29,6 +29,16 @@ export class AddNewSecretComponent implements OnInit {
   create(){
     this.onCreateSubmit.emit({title: this.title?.value, text: this.text?.value});
   }
+  showHideLoading(){
+    if(this.showLoading===true){
+      this.showLoading=false;
+      this.showCreateBTN=true;
+    }
+    else{
+      this.showLoading=true;
+      this.showCreateBTN=false;
+    }
+  }
   ngOnInit(): void {
   }
   get title(){

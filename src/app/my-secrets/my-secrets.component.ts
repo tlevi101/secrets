@@ -8,6 +8,7 @@ import { Component, OnInit, Output,EventEmitter } from '@angular/core';
 export class MySecretsComponent implements OnInit {
 
   authorized: boolean = false;
+  today=new Date();
   showLoading: boolean = false;
   secrets: {
     id: number, 
