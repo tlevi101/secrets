@@ -12,6 +12,7 @@ export class SecretsComponent implements OnInit {
   sub:any;
   showLoading: boolean = false;
   secret :any;
+  err:any;
   constructor(private route: ActivatedRoute) {
     this.uuid = "";
     this.sub = this.route.params.subscribe(params => {

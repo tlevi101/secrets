@@ -5,7 +5,7 @@
         <div *ngIf="email?.touched && email?.getError('required')" class="alert alert-danger" role="alert">
           Email is required!  
         </div>
-        <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger-sm" role="alert">
+        <div *ngIf="email?.touched && email?.getError('email')" class="alert alert-danger" role="alert">
             Email format is not correct!
           </div>
           <div *ngIf="requestError.code===404" class="alert alert-danger" role="alert">

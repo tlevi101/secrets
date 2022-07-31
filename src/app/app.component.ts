@@ -11,7 +11,7 @@ export class AppComponent {
   private currentRoute: any;
   private authToken: { token: string };
   private hr = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-  private httpRoot = "https://picturesque-zealous-gymnast.glitch.me";
+  private httpRoot = "https://octagonal-chip-click.glitch.me/";
   constructor(private http: HttpClient, private router: Router) {
     this.authToken = { token: '' };
   }
@@ -97,6 +97,9 @@ export class AppComponent {
         this.currentRoute.showHideLoading();
       },
       (err:any) => {
+        console.log(err);
+        this.currentRoute.err=err;
+        this.currentRoute.showHideLoading();
         //TODO:: Any other error from server
       }
     )

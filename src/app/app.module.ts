@@ -10,6 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { MySecretsComponent } from './my-secrets/my-secrets.component';
 import { AddNewSecretComponent } from './add-new-secret/add-new-secret.component';
 import { SecretsComponent } from './secrets/secrets.component';
+import { ShareComponent } from './share/share.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +18,8 @@ import { SecretsComponent } from './secrets/secrets.component';
     RegisterComponent,
     MySecretsComponent,
     AddNewSecretComponent,
-    SecretsComponent
+    SecretsComponent,
+    ShareComponent
   ],
   imports: [
     BrowserModule,
