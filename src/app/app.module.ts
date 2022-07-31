@@ -9,13 +9,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { MySecretsComponent } from './my-secrets/my-secrets.component';
 import { AddNewSecretComponent } from './add-new-secret/add-new-secret.component';
+import { SecretsComponent } from './secrets/secrets.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
     MySecretsComponent,
-    AddNewSecretComponent
+    AddNewSecretComponent,
+    SecretsComponent
   ],
   imports: [
     BrowserModule,

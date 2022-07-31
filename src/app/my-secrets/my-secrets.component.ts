@@ -1,4 +1,5 @@
-import { Component, OnInit, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-my-secrets',
@@ -21,7 +22,9 @@ export class MySecretsComponent implements OnInit {
     viewLimit:number,
     createdat: Date,
     updatedat: Date}[]=[];
-  constructor() { 
+  domainURL: string;
+  constructor(@Inject(DOCUMENT) private document: Document) { 
+    this.domainURL=this.document.location.origin;
   }
 
   ngOnInit(): void {
