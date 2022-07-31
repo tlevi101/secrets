@@ -10,6 +10,8 @@ export class SecretsComponent implements OnInit {
 
   uuid: string;
   sub:any;
+  showLoading: boolean = false;
+  secret :any;
   constructor(private route: ActivatedRoute) {
     this.uuid = "";
     this.sub = this.route.params.subscribe(params => {
@@ -19,5 +21,12 @@ export class SecretsComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  showHideLoading(){
+    if(this.showLoading===true){
+      this.showLoading=false;
+    }
+    else{
+      this.showLoading=true;
+    }
+  }
 }
