@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "tlevi101secrets",
-    "public": "public",
+    "public": "src",
     "ignore": [
       "firebase.json",
       "**/.*",
