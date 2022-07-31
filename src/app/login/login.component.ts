@@ -41,6 +41,9 @@ export class LoginComponent implements OnInit {
       this.showLoginBTN=false;
     }
   }
+  foo(){
+    console.log('foo');
+  }
   get email() {
     return this.loginForm.get('email');
   }

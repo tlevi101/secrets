@@ -1,6 +1,9 @@
+
+<button class="btn btn-lg btn-primary" (click)="foo()">ASsssssssssssssssssssssssss</button>
+
 <div *ngIf="showME" class="container">
     <h1 class="text-center">Login</h1>
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <div [formGroup]="loginForm" >
         <input type="email" name="email" class="form-control mb-3" placeholder="Email address" formControlName="email">
         <div *ngIf="email?.touched && email?.getError('required')" class="alert alert-danger" role="alert">
           Email is required!  
@@ -18,10 +21,11 @@
           <div *ngIf="requestError.code===401" class="alert alert-danger" role="alert">
             {{requestError.message}} 
           </div>
+        </div>
         <div class="row mb-3 ">
             
             <div class="col text-center">
-                <button type="submit" *ngIf="showLoginBTN"[disabled]="loginForm.invalid" class="btn btn-lg btn-primary">Login</button>
+                <button (click)="login()" *ngIf="showLoginBTN"[disabled]="loginForm.invalid" class="btn btn-lg btn-primary">Login</button>
                 <div class="text-center" *ngIf="showLoading">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only"></span>
@@ -29,6 +33,5 @@
                 </div>
             </div>
         </div>
-    </form>
 </div>
 
