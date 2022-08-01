@@ -1,5 +1,7 @@
-import { Component, OnInit, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Output,EventEmitter,Inject } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'app-share',
   templateUrl: './share.component.html',
@@ -8,12 +10,23 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 export class ShareComponent implements OnInit {
 
   public myName="ShareComponent";
+  id: number;
+  sub:any;
   shareForm: FormGroup;
   showShareBTN=true;
   showLoading = false;
   authorized =false;
+  noRES=true;
+  res:any;
+  domainURL: string;
+  reqError: any;
   @Output() onShareSubmit = new EventEmitter<{viewLimit: number, ttl:any}>();
-  constructor() { 
+  constructor(private route: ActivatedRoute,@Inject(DOCUMENT) private document: Document) {
+    this.domainURL=this.document.location.origin;
+    this.id=0;
+    this.sub = this.route.params.subscribe(params => {
+      this.id = +params['id']; // (+) converts string 'id' to a number
+    });
     const FB= new FormBuilder();
     this.shareForm = FB.group({
       viewLimit:['',[
@@ -39,9 +52,24 @@ export class ShareComponent implements OnInit {
     });
   }
   share(){
-    this.onShareSubmit.emit({viewLimit: this.ViewLimit?.value, ttl: this.TTL?.value});
+    if(this.TTL?.value!==''){
+      this.onShareSubmit.emit({viewLimit: this.ViewLimit?.value, ttl: this.TTL?.value});
+    }
+    else{
+      this.onShareSubmit.emit({viewLimit: this.ViewLimit?.value, ttl:null});
+    }
   }
   ngOnInit(): void {
+  }
+  showHideLoading(){
+    if(this.showLoading===true){
+      this.showLoading=false;
+      this.showShareBTN=true;
+    }
+    else{
+      this.showLoading=true;
+      this.showShareBTN=false;
+    }
   }
   get ViewLimit(){
     return this.shareForm.get('viewLimit');

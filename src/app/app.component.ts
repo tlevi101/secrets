@@ -79,7 +79,8 @@ export class AppComponent implements OnInit{
   }
   sendCreateRequest(req: any) {
     this.currentRoute.showHideLoading();
-    this.http.post(`${this.backendRoot}/my-secrets/add`, JSON.stringify(req), { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
+    this.http.post(`${this.backendRoot}/my-secrets/add`, JSON.stringify(req), 
+    { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
           this.router.navigate(['/my-secrets']);
@@ -101,6 +102,24 @@ export class AppComponent implements OnInit{
         this.currentRoute.err=err;
         this.currentRoute.showHideLoading();
         //TODO:: Any other error from server
+      }
+    )
+  }
+  sendShareRequest(req: any) {
+    this.currentRoute.showHideLoading();
+    console.log(this.currentRoute.id);
+    this.http.put(`${this.backendRoot}/my-secrets/share/${this.currentRoute.id}`, JSON.stringify(req), 
+    { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`)}).subscribe(
+      (res: any) => {
+        this.currentRoute.showHideLoading();
+        this.currentRoute.res=res;
+        this.currentRoute.noRES=false;
+      },
+      (err:any) => {
+        this.currentRoute.showHideLoading();
+        this.currentRoute.reqError=err;
+        console.log(err);
+        
       }
     )
   }
@@ -138,6 +157,14 @@ export class AppComponent implements OnInit{
     }
     else if ($event.myName === 'SecretsComponent') {
       this.sendRequestForSecret($event);
+    }
+    else if($event.myName === 'ShareComponent') {
+      if (localStorage.getItem('AuthToken') !== null) {
+        $event.authorized = true;
+        $event.onShareSubmit.subscribe((req: any) => {
+          this.sendShareRequest(req);
+        });
+      }
     }
   }
   removedComponent($event: any) {

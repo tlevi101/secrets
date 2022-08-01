@@ -1,4 +1,4 @@
-<div *ngIf="!authorized" class="container">
+<div *ngIf="authorized && noRES" class="container">
     <h1 class="text-center">Share</h1>
     <form [formGroup]="shareForm" (ngSubmit)="share()">
         <input type="number" name="viewLimit" class="form-control mb-3" placeholder="View limit" formControlName="viewLimit">
@@ -21,4 +21,24 @@
               </div>
           </div>
         </form>
+</div>
+<div class="container">
+    <div *ngIf="!noRES" class="alert alert-info mb-2 text-center" role="alert">
+        <a [href]="domainURL+'/secrets/'+res.url" >{{domainURL+'/secrets/'+res.url}}</a>
+    </div>
+    <div *ngIf="noRES && reqError?.status ===400" class="alert alert-danger" role="alert">
+        Url format is not correct! 
+    </div>
+    <div *ngIf="noRES && reqError?.status ===404" class="alert alert-danger" role="alert">
+            Secret does not exist!
+    </div>
+    <div *ngIf="noRES && reqError?.status ===403" class="alert alert-danger" role="alert">
+        Secret is not yours!
+    </div>
+    <div *ngIf="!authorized" class="alert alert-danger" role="alert">
+        You must login first! 
+    </div>
+    <div *ngIf="noRES && reqError?.status ===500" class="alert alert-danger" role="alert">
+        Iternal server error!
+</div>
 </div>
