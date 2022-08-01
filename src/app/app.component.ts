@@ -91,7 +91,9 @@ export class AppComponent implements OnInit {
       { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
-          this.router.navigate(['/my-secrets']);
+          console.log(res);
+          this.currentRoute.secret= res;
+          // this.router.navigate(['/my-secrets']);
           this.currentRoute.showHideLoading();
         },
         (err) => {

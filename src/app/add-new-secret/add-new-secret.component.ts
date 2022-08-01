@@ -1,4 +1,5 @@
-import { Component, OnInit, Output,EventEmitter } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, OnInit, Output,EventEmitter, Inject } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -13,8 +14,11 @@ export class AddNewSecretComponent implements OnInit {
   showCreateBTN=true;
   authorized= false;
   showLoading = false;
+  secret:any =null;
+  domainURL: any;
   @Output() onCreateSubmit = new EventEmitter<{title: string, text:string}>();
-  constructor() { 
+  constructor(@Inject(DOCUMENT) private document: Document) { 
+    this.domainURL=this.document.location.origin;
     const FB= new FormBuilder();
     this.createForm= FB.group({
       title:['',[
