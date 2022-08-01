@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   title = 'secrets';
   private currentRoute: any;
   private hr = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-  private backendRoot = "http://localhost:4000";
+  private backendRoot = "https://octagonal-chip-click.glitch.me";
   public userName:string="";
   constructor(private http: HttpClient, private router: Router, private jwtHelper: JwtHelperService) {
     if(localStorage.getItem('AuthToken')!== null){
