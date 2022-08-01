@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   title = 'secrets';
   private currentRoute: any;
   private hr = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-  private backendRoot = "https://octagonal-chip-click.glitch.me";
+  private backendRoot = "http://localhost:4000";
   public userName:string="";
   constructor(private http: HttpClient, private router: Router, private jwtHelper: JwtHelperService) {
     if(localStorage.getItem('AuthToken')!== null){
@@ -56,13 +56,12 @@ export class AppComponent implements OnInit {
           console.log(res);
         },
         (err) => {
-          if (err.error?.message?.includes('email')) {
-            this.currentRoute.requestError = { email: err.error.message, username: '' };
+          if (err.error?.message?.toString().includes('Email')) {
+            this.currentRoute.requestError = { email: err.error?.message, username: '' };
           }
           else {
             this.currentRoute.requestError = { username: err.error?.message, email: '' };
           }
-          console.log(err);
           this.currentRoute.showHideLoading();
           //TODO:: Any other error from server
 
