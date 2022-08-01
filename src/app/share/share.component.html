@@ -1,1 +1,24 @@
-<p>share works!</p>
+<div *ngIf="!authorized" class="container">
+    <h1 class="text-center">Share</h1>
+    <form [formGroup]="shareForm" (ngSubmit)="share()">
+        <input type="number" name="viewLimit" class="form-control mb-3" placeholder="View limit" formControlName="viewLimit">
+        <div *ngIf="ViewLimit?.touched && ViewLimit?.getError('required')" class="alert alert-danger" role="alert">
+          View limit is required!  
+        </div>
+        <label for="ttl">Expire date (not required)</label> 
+        <input type="datetime-local" class="form-control mb-3" name="ttl" formControlName="ttl">
+        <div *ngIf="TTL?.touched && TTL?.getError('tooEarly')" class="alert alert-danger" role="alert">
+            Expire date is too early! It must be at least 5 hour difference from now!
+          </div> 
+          <div class="row mb-3 ">
+              <div class="col text-center">
+                  <button (click)="share()" type="button" *ngIf="showShareBTN"[disabled]="shareForm.invalid" class="btn btn-lg btn-primary">Login</button>
+                  <div class="text-center" *ngIf="showLoading">
+                      <div class="spinner-border text-primary" role="status">
+                          <span class="sr-only"></span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </form>
+</div>
