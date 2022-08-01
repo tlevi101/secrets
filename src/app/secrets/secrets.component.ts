@@ -8,6 +8,7 @@ import { ActivatedRoute} from '@angular/router';
 })
 export class SecretsComponent implements OnInit {
 
+  public myName="SecretsComponent"
   uuid: string;
   sub:any;
   showLoading: boolean = false;

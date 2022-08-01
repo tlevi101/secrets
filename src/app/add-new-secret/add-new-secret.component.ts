@@ -8,6 +8,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 })
 export class AddNewSecretComponent implements OnInit {
   
+  public myName="AddNewSecretComponent";
   createForm: FormGroup;
   showCreateBTN=true;
   authorized= false;

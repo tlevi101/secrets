@@ -20,7 +20,6 @@ export class AppComponent {
     const CB = () => {
       this.http.post(`${this.httpRoot}/login`, JSON.stringify($event), { headers: this.hr }).subscribe(
         (res: any) => {
-          console.log(res.token);
           this.authToken.token = res?.token
           this.currentRoute.showHideLoading();
           this.currentRoute.showME = false;
@@ -39,7 +38,6 @@ export class AppComponent {
     const CB = () => {
       this.http.post(`${this.httpRoot}/register`, JSON.stringify($event), { headers: this.hr }).subscribe(
         (res: any) => {
-          console.log(res.token);
           this.authToken.token = res?.token;
           this.currentRoute.showHideLoading();
           this.currentRoute.showME = false;
@@ -64,7 +62,6 @@ export class AppComponent {
     this.http.get(`${this.httpRoot}/my-secrets`, { headers: this.hr.append('Authorization', `Bearer ${this.authToken.token}`) })
       .subscribe(
         (res: any) => {
-          console.log(res);
           res.map((x: any) => this.currentRoute.addnewSecret(x));
           this.currentRoute.showHideLoading();
         },
@@ -80,7 +77,6 @@ export class AppComponent {
     this.http.post(`${this.httpRoot}/my-secrets/add`, JSON.stringify(req), { headers: this.hr.append('Authorization', `Bearer ${this.authToken.token}`) })
       .subscribe(
         (res: any) => {
-          console.log(res);
           this.router.navigate(['/my-secrets']);
           this.currentRoute.showHideLoading();
         },
@@ -97,7 +93,6 @@ export class AppComponent {
         this.currentRoute.showHideLoading();
       },
       (err:any) => {
-        console.log(err);
         this.currentRoute.err=err;
         this.currentRoute.showHideLoading();
         //TODO:: Any other error from server
@@ -106,23 +101,23 @@ export class AppComponent {
   }
   addedComponent($event: any) {
     this.currentRoute = $event;
-    if ($event.constructor.name === 'LoginComponent') {
+    if ($event.myName === 'LoginComponent') {
       $event.onLoginSubmit.subscribe((req: { email: string, password: string }) => {
         this.sendLoginRequest(req);
       });
     }
-    else if ($event.constructor.name === 'RegisterComponent') {
+    else if ($event.myName === 'RegisterComponent') {
       $event.onRegSubmit.subscribe((req: any) => {
         this.sendLoginRequest(req);
       });
     }
-    else if ($event.constructor.name === 'MySecretsComponent') {
+    else if ($event.myName === 'MySecretsComponent') {
       if (this.AuthToken.token !== '') {
         $event.authorized = true;
         this.mySecretsRequest();
       }
     }
-    else if ($event.constructor.name === 'AddNewSecretComponent') {
+    else if ($event.myName === 'AddNewSecretComponent') {
       if (this.AuthToken.token !== '') {
         $event.authorized = true;
         $event.onCreateSubmit.subscribe((req: any) => {
@@ -130,7 +125,7 @@ export class AppComponent {
         });
       }
     }
-    else if ($event.constructor.name === 'SecretsComponent') {
+    else if ($event.myName === 'SecretsComponent') {
       this.sendRequestForSecret($event);
     }
   }

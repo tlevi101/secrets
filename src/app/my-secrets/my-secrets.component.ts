@@ -8,6 +8,7 @@ import { DOCUMENT } from '@angular/common';
 })
 export class MySecretsComponent implements OnInit {
 
+  public myName="MySecretsComponent";
   authorized: boolean = false;
   today=new Date();
   showLoading: boolean = false;

@@ -6,6 +6,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  public myName="LoginComponent";
   loginForm: FormGroup;
   showLoginBTN=true;
   showLoading = false;

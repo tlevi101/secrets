@@ -6,6 +6,8 @@ import { FormGroup, Validators, FormBuilder,AbstractControl } from '@angular/for
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+
+  public myName="RegisterComponent";
   registerForm: FormGroup;
   showRegisterBTN=true;
   showLoading = false;
@@ -38,7 +40,6 @@ export class RegisterComponent implements OnInit {
       }
       else{
         this.passwordAgain?.setErrors(null);
-        console.log(this.passwordAgain);
       }
     })
     this.password?.valueChanges.subscribe(() => {
@@ -47,7 +48,6 @@ export class RegisterComponent implements OnInit {
       }
       else{
         this.passwordAgain?.setErrors(null);
-        console.log(this.passwordAgain);
       }
     })
   }
