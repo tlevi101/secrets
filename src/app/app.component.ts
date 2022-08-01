@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -7,23 +7,19 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'secrets';
   private currentRoute: any;
   private hr = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-  private httpRoot = "https://octagonal-chip-click.glitch.me";
+  private backendRoot = "https://octagonal-chip-click.glitch.me";
   constructor(private http: HttpClient, private router: Router) {
-    if(localStorage.getItem('AuthToken')!==null){
-      this.router.navigate(['/my-secrets']);
-    }
-    else{
-      this.router.navigate(['/login']);
-    }
+  }
+  ngOnInit(): void {
   }
   sendLoginRequest($event: { email: string, password: string }) {
     this.currentRoute.showHideLoading();
     const CB = () => {
-      this.http.post(`${this.httpRoot}/login`, JSON.stringify($event), { headers: this.hr }).subscribe(
+      this.http.post(`${this.backendRoot}/login`, JSON.stringify($event), { headers: this.hr }).subscribe(
         (res: any) => {
           localStorage.setItem('AuthToken', res?.token);
           this.currentRoute.showHideLoading();
@@ -42,7 +38,7 @@ export class AppComponent {
   sendRegisterRequest($event: any) {
     this.currentRoute.showHideLoading();
     const CB = () => {
-      this.http.post(`${this.httpRoot}/register`, $event, { headers: this.hr }).subscribe(
+      this.http.post(`${this.backendRoot}/register`, $event, { headers: this.hr }).subscribe(
         (res: any) => {
           localStorage.setItem('AuthToken', res?.token);
           this.currentRoute.showHideLoading();
@@ -68,7 +64,7 @@ export class AppComponent {
   }
   mySecretsRequest() {
     this.currentRoute.showHideLoading();
-    this.http.get(`${this.httpRoot}/my-secrets`, { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
+    this.http.get(`${this.backendRoot}/my-secrets`, { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
           res.map((x: any) => this.currentRoute.addnewSecret(x));
@@ -83,7 +79,7 @@ export class AppComponent {
   }
   sendCreateRequest(req: any) {
     this.currentRoute.showHideLoading();
-    this.http.post(`${this.httpRoot}/my-secrets/add`, JSON.stringify(req), { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
+    this.http.post(`${this.backendRoot}/my-secrets/add`, JSON.stringify(req), { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
           this.router.navigate(['/my-secrets']);
@@ -96,7 +92,7 @@ export class AppComponent {
   }
   sendRequestForSecret(req: any) {
     this.currentRoute.showHideLoading();
-    this.http.get(`${this.httpRoot}/secrets/${this.currentRoute.uuid}`, { headers: this.hr}).subscribe(
+    this.http.get(`${this.backendRoot}/secrets/${this.currentRoute.uuid}`, { headers: this.hr}).subscribe(
       (res: any) => {
         this.currentRoute.secret=res;
         this.currentRoute.showHideLoading();
