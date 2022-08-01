@@ -151,9 +151,6 @@ export class AppComponent {
       });
     }
   }
-  foo(){
-    console.log('foo');
-  }
   logout() {
     this.authToken.token = '';
   }
