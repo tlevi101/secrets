@@ -44,4 +44,8 @@ export class MySecretsComponent implements OnInit {
       this.showLoading=true;
     }
   }
+  ttlAsString( ttl :Date): string{
+    const _ttl:Date = new Date(ttl);
+    return _ttl.toLocaleString();
+  }
 }
