@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   showLoginBTN=true;
   showLoading = false;
-  showME =true;
+  authorized =false;
   requestError: {code: number, message: string};
   @Output() onLoginSubmit = new EventEmitter<{email: string, password:string}>();
   constructor() { 

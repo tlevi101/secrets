@@ -7,11 +7,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" routerLink="/login" *ngIf="AuthToken.token===''">Login</a>
-        <a class="nav-link" routerLink="/register" *ngIf="AuthToken.token===''">Register</a>
-        <a class="nav-link" routerLink="/my-secrets" *ngIf="AuthToken.token!==''">My secrets</a>
-        <a class="nav-link" routerLink="/my-secrets/add" *ngIf="AuthToken.token!==''">Create new secret</a>
-        <a class="nav-link" routerLink="/" *ngIf="AuthToken.token!==''" (click)="logout()">Logout</a>
+        <a class="nav-link" routerLink="/login" *ngIf="LocalStorage.getItem('AuthToken')===null">Login</a>
+        <a class="nav-link" routerLink="/register" *ngIf="LocalStorage.getItem('AuthToken')===null">Register</a>
+        <a class="nav-link" routerLink="/my-secrets" *ngIf="LocalStorage.getItem('AuthToken')!==null">My secrets</a>
+        <a class="nav-link" routerLink="/my-secrets/add" *ngIf="LocalStorage.getItem('AuthToken')!==null">Create new secret</a>
+        <a class="nav-link" routerLink="/" *ngIf="LocalStorage.getItem('AuthToken')!==null" (click)="logout()">Logout</a>
       </div>
     </div>
   </div>

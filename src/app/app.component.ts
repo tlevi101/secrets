@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,20 +10,25 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'secrets';
   private currentRoute: any;
-  private authToken: { token: string };
   private hr = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-  private httpRoot = "https://octagonal-chip-click.glitch.me/";
+  private httpRoot = "https://octagonal-chip-click.glitch.me";
   constructor(private http: HttpClient, private router: Router) {
-    this.authToken = { token: '' };
+    if(localStorage.getItem('AuthToken')!==null){
+      this.router.navigate(['/my-secrets']);
+    }
+    else{
+      this.router.navigate(['/login']);
+    }
   }
   sendLoginRequest($event: { email: string, password: string }) {
     this.currentRoute.showHideLoading();
     const CB = () => {
       this.http.post(`${this.httpRoot}/login`, JSON.stringify($event), { headers: this.hr }).subscribe(
         (res: any) => {
-          this.authToken.token = res?.token
+          localStorage.setItem('AuthToken', res?.token);
           this.currentRoute.showHideLoading();
-          this.currentRoute.showME = false;
+          this.currentRoute.authorized = true;
+          this.router.navigate(['/my-secrets']);
         },
         (err) => {
           this.currentRoute.requestError = { code: err.status, message: err.error.message };
@@ -36,19 +42,22 @@ export class AppComponent {
   sendRegisterRequest($event: any) {
     this.currentRoute.showHideLoading();
     const CB = () => {
-      this.http.post(`${this.httpRoot}/register`, JSON.stringify($event), { headers: this.hr }).subscribe(
+      this.http.post(`${this.httpRoot}/register`, $event, { headers: this.hr }).subscribe(
         (res: any) => {
-          this.authToken.token = res?.token;
+          localStorage.setItem('AuthToken', res?.token);
           this.currentRoute.showHideLoading();
-          this.currentRoute.showME = false;
+          this.currentRoute.authorized = true;
+          this.router.navigate(['/my-secrets']);
+          console.log(res);
         },
         (err) => {
-          if (err.error.message.includes('email')) {
+          if (err.error?.message?.includes('email')) {
             this.currentRoute.requestError = { email: err.error.message, username: '' };
           }
           else {
-            this.currentRoute.requestError = { username: err.error.message, email: '' };
+            this.currentRoute.requestError = { username: err.error?.message, email: '' };
           }
+          console.log(err);
           this.currentRoute.showHideLoading();
           //TODO:: Any other error from server
 
@@ -59,7 +68,7 @@ export class AppComponent {
   }
   mySecretsRequest() {
     this.currentRoute.showHideLoading();
-    this.http.get(`${this.httpRoot}/my-secrets`, { headers: this.hr.append('Authorization', `Bearer ${this.authToken.token}`) })
+    this.http.get(`${this.httpRoot}/my-secrets`, { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
           res.map((x: any) => this.currentRoute.addnewSecret(x));
@@ -74,7 +83,7 @@ export class AppComponent {
   }
   sendCreateRequest(req: any) {
     this.currentRoute.showHideLoading();
-    this.http.post(`${this.httpRoot}/my-secrets/add`, JSON.stringify(req), { headers: this.hr.append('Authorization', `Bearer ${this.authToken.token}`) })
+    this.http.post(`${this.httpRoot}/my-secrets/add`, JSON.stringify(req), { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
           this.router.navigate(['/my-secrets']);
@@ -102,23 +111,29 @@ export class AppComponent {
   addedComponent($event: any) {
     this.currentRoute = $event;
     if ($event.myName === 'LoginComponent') {
+      if (localStorage.getItem('AuthToken') !== null) {
+        $event.authorized = true;
+      }
       $event.onLoginSubmit.subscribe((req: { email: string, password: string }) => {
         this.sendLoginRequest(req);
       });
     }
     else if ($event.myName === 'RegisterComponent') {
+      if (localStorage.getItem('AuthToken') !== null) {
+        $event.authorized = true;
+      }
       $event.onRegSubmit.subscribe((req: any) => {
-        this.sendLoginRequest(req);
+        this.sendRegisterRequest(req);
       });
     }
     else if ($event.myName === 'MySecretsComponent') {
-      if (this.AuthToken.token !== '') {
+      if (localStorage.getItem('AuthToken') !== null) {
         $event.authorized = true;
         this.mySecretsRequest();
       }
     }
     else if ($event.myName === 'AddNewSecretComponent') {
-      if (this.AuthToken.token !== '') {
+      if (localStorage.getItem('AuthToken') !== null) {
         $event.authorized = true;
         $event.onCreateSubmit.subscribe((req: any) => {
           this.sendCreateRequest(req);
@@ -130,26 +145,27 @@ export class AppComponent {
     }
   }
   removedComponent($event: any) {
-    if ($event.constructor.name === 'LoginComponent') {
+    if ($event.myName === 'LoginComponent') {
       $event.onLoginSubmit.unsubscribe((req: { email: string, password: string }) => {
         this.sendLoginRequest(req);
       });
     }
-    else if ($event.constructor.name === 'RegisterComponent') {
+    else if ($event.myName === 'RegisterComponent') {
       $event.onRegSubmit.unsubscribe((req: any) => {
-        this.sendLoginRequest(req);
+        this.sendRegisterRequest(req);
       });
     }
-    else if ($event.constructor.name === 'AddNewSecretComponent') {
+    else if ($event.myName === 'AddNewSecretComponent') {
       $event.onCreateSubmit.subscribe((req: any) => {
         this.sendCreateRequest(req);
       });
     }
   }
   logout() {
-    this.authToken.token = '';
+    localStorage.removeItem('AuthToken');
+    this.router.navigate(['/login']);
   }
-  get AuthToken() {
-    return this.authToken;
+  get LocalStorage(): any {
+    return localStorage;
   }
 }

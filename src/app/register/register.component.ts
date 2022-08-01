@@ -11,7 +11,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   showRegisterBTN=true;
   showLoading = false;
-  showME =true;
+  authorized =false;
   requestError: {email:'', username:''};
   @Output() onRegSubmit = new EventEmitter<{username:string,email: string, password:string, passwordAgain:string}>();
   constructor() { 

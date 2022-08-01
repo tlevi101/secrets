@@ -1,4 +1,9 @@
-<div *ngIf="showME" class="container">
+<div *ngIf="authorized" class="container p-4">
+  <div class="alert alert-warning m-3 text-center" role="alert">
+      <strong> You are already logged in! </strong>
+  </div>
+</div>
+<div *ngIf="!authorized" class="container">
     <h1 class="text-center">Login</h1>
     <form [formGroup]="loginForm" (ngSubmit)="login()">
         <input type="email" name="email" class="form-control mb-3" placeholder="Email address" formControlName="email">
