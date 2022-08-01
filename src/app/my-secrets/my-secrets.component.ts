@@ -9,6 +9,8 @@ import { DOCUMENT } from '@angular/common';
 export class MySecretsComponent implements OnInit {
 
   public myName="MySecretsComponent";
+  page=1;
+  pageSize=5;
   authorized: boolean = false;
   today=new Date();
   showLoading: boolean = false;

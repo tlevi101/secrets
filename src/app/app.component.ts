@@ -1,18 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'secrets';
   private currentRoute: any;
   private hr = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
   private backendRoot = "https://octagonal-chip-click.glitch.me";
-  constructor(private http: HttpClient, private router: Router) {
+  public userName:string="";
+  constructor(private http: HttpClient, private router: Router, private jwtHelper: JwtHelperService) {
+    if(localStorage.getItem('AuthToken')!== null){
+      const token:any=localStorage.getItem('AuthToken');
+      this.userName = this.jwtHelper.decodeToken(token).username;
+    }
   }
   ngOnInit(): void {
   }
@@ -22,6 +28,8 @@ export class AppComponent implements OnInit{
       this.http.post(`${this.backendRoot}/login`, JSON.stringify($event), { headers: this.hr }).subscribe(
         (res: any) => {
           localStorage.setItem('AuthToken', res?.token);
+          this.userName = this.jwtHelper.decodeToken(res?.token).username;
+          console.log(this.userName);
           this.currentRoute.showHideLoading();
           this.currentRoute.authorized = true;
           this.router.navigate(['/my-secrets']);
@@ -41,6 +49,7 @@ export class AppComponent implements OnInit{
       this.http.post(`${this.backendRoot}/register`, $event, { headers: this.hr }).subscribe(
         (res: any) => {
           localStorage.setItem('AuthToken', res?.token);
+          this.userName = this.jwtHelper.decodeToken(res?.token).username;
           this.currentRoute.showHideLoading();
           this.currentRoute.authorized = true;
           this.router.navigate(['/my-secrets']);
@@ -79,8 +88,8 @@ export class AppComponent implements OnInit{
   }
   sendCreateRequest(req: any) {
     this.currentRoute.showHideLoading();
-    this.http.post(`${this.backendRoot}/my-secrets/add`, JSON.stringify(req), 
-    { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
+    this.http.post(`${this.backendRoot}/my-secrets/add`, JSON.stringify(req),
+      { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) })
       .subscribe(
         (res: any) => {
           this.router.navigate(['/my-secrets']);
@@ -93,13 +102,13 @@ export class AppComponent implements OnInit{
   }
   sendRequestForSecret(req: any) {
     this.currentRoute.showHideLoading();
-    this.http.get(`${this.backendRoot}/secrets/${this.currentRoute.uuid}`, { headers: this.hr}).subscribe(
+    this.http.get(`${this.backendRoot}/secrets/${this.currentRoute.uuid}`, { headers: this.hr }).subscribe(
       (res: any) => {
-        this.currentRoute.secret=res;
+        this.currentRoute.secret = res;
         this.currentRoute.showHideLoading();
       },
-      (err:any) => {
-        this.currentRoute.err=err;
+      (err: any) => {
+        this.currentRoute.err = err;
         this.currentRoute.showHideLoading();
         //TODO:: Any other error from server
       }
@@ -108,20 +117,20 @@ export class AppComponent implements OnInit{
   sendShareRequest(req: any) {
     this.currentRoute.showHideLoading();
     console.log(this.currentRoute.id);
-    this.http.put(`${this.backendRoot}/my-secrets/share/${this.currentRoute.id}`, JSON.stringify(req), 
-    { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`)}).subscribe(
-      (res: any) => {
-        this.currentRoute.showHideLoading();
-        this.currentRoute.res=res;
-        this.currentRoute.noRES=false;
-      },
-      (err:any) => {
-        this.currentRoute.showHideLoading();
-        this.currentRoute.reqError=err;
-        console.log(err);
-        
-      }
-    )
+    this.http.put(`${this.backendRoot}/my-secrets/share/${this.currentRoute.id}`, JSON.stringify(req),
+      { headers: this.hr.append('Authorization', `Bearer ${localStorage.getItem('AuthToken')}`) }).subscribe(
+        (res: any) => {
+          this.currentRoute.showHideLoading();
+          this.currentRoute.res = res;
+          this.currentRoute.noRES = false;
+        },
+        (err: any) => {
+          this.currentRoute.showHideLoading();
+          this.currentRoute.reqError = err;
+          console.log(err);
+
+        }
+      )
   }
   addedComponent($event: any) {
     this.currentRoute = $event;
@@ -158,7 +167,7 @@ export class AppComponent implements OnInit{
     else if ($event.myName === 'SecretsComponent') {
       this.sendRequestForSecret($event);
     }
-    else if($event.myName === 'ShareComponent') {
+    else if ($event.myName === 'ShareComponent') {
       if (localStorage.getItem('AuthToken') !== null) {
         $event.authorized = true;
         $event.onShareSubmit.subscribe((req: any) => {
@@ -169,23 +178,24 @@ export class AppComponent implements OnInit{
   }
   removedComponent($event: any) {
     if ($event.myName === 'LoginComponent') {
-      $event.onLoginSubmit.unsubscribe((req: { email: string, password: string }) => {
-        this.sendLoginRequest(req);
-      });
+      $event.onLoginSubmit.unsubscribe();
     }
     else if ($event.myName === 'RegisterComponent') {
-      $event.onRegSubmit.unsubscribe((req: any) => {
-        this.sendRegisterRequest(req);
-      });
+      $event.onRegSubmit.unsubscribe();
     }
     else if ($event.myName === 'AddNewSecretComponent') {
-      $event.onCreateSubmit.subscribe((req: any) => {
-        this.sendCreateRequest(req);
-      });
+      $event.onCreateSubmit.unsubscribe();
+    }
+    else if ($event.myName === 'ShareComponent') {
+      if (localStorage.getItem('AuthToken') !== null) {
+        $event.authorized = true;
+        $event.onShareSubmit.unsubscribe();
+      }
     }
   }
   logout() {
     localStorage.removeItem('AuthToken');
+    this.userName=""
     this.router.navigate(['/login']);
   }
   get LocalStorage(): any {
